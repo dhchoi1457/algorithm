@@ -3,6 +3,7 @@
 // 입력의 고난을 겪어 많이 배웁니다..
 // 문제 이름이 AC인 이유는 에이X...
 // 틀렸다.. 추후에 고치자ㅠㅠ
+// 고쳤다.
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -28,18 +29,18 @@ int main()
 
 	for(int k=0; k<T; k++)
 	{
+		dq.clear();
+
 		string p,arr;
-		
 		cin >> p; // 명령어 R , D 
 		int len;
-		cin >> len; // 숫자길이? 어따쓰지 근데
+		cin >> len; // 숫자길이 0일때 활용
+		cin >> arr; // len 0일때 error 처리하려고 이거 안받았었는데, 일단 받게 수정함. 그리고 따로 empty 처리
 
-		if(len >0) cin >> arr; // 내용물 없으면 안돌아야지
-		string input;
+		string input; 
 
 		for(auto s:arr)
 		{	
-			
 			if(s>='0' & s<='9'){input+=s;}
 			else
 			{
@@ -49,6 +50,15 @@ int main()
 					input.clear();	
 				}
 			}
+		}
+
+		//**여기 수정 
+		if(len ==0)
+		{
+			dq.push_back(1);
+			dq.clear();
+			// 공백으로 입력될떄,
+			// dq.empty()가 true로 안잡혀서 error로 안들어감. 이거 수정 
 		}
 
 		//printQue(); // ok 잘들어감
@@ -64,7 +74,6 @@ int main()
 			}
 			if(s=='D')
 			{
-
 				if(dq.empty())
 				{
 					chk_error=1;
@@ -113,7 +122,6 @@ int main()
 			}
 			cout << ']'<<'\n';
 		}
-		dq.clear();
 	}
 	return 0;
 }
