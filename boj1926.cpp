@@ -1,13 +1,11 @@
 //boj 1926
 // 그림 
-// 왜 nx ny가 업데이트가 안될까ㅠㅜ
-
 
 #include <bits/stdc++.h>
 using namespace std;
 
-#define X first;
-#define Y second;
+#define X first
+#define Y second // 여기에 ;붙이면 에러남. 연산 안됨.. 
 
 int board[502][502]; // map
 int vis[502][502]; // visited check
@@ -33,9 +31,8 @@ int main()
 	for(int i=0; i<N; i++){
 		for(int j=0; j<M; j++){ // starting point iter
 			if(board[i][j]==0 or vis[i][j]==1) continue; // 이미 방문했으면 continue
-			cout << i<< " start " << j << '\n';
+			
 			cnt++;
-			cout << "cnt:" << cnt << '\n';
 			queue<pair<int,int> > Q;
 			vis[i][j] = 1; //시작지점 방문. 이거 실수하기 쉽다. 
 			Q.push({i,j});
@@ -47,17 +44,11 @@ int main()
 				auto cur = Q.front(); Q.pop();
 				for(int dir =0; dir<4; dir++)
 				{
-					cout << cur.X;
-					cout << "?? " << dx[dir] << '\n'; 
 					int nx = (int) cur.X + dx[dir];
-					cout << "nx: "<< nx << '\n';
 					int ny = cur.Y + dy[dir];
-					cout << "ny: "<< ny << '\n';
-					cout << ny << '\n';
 					if(nx<0 or nx>=N or ny<0 or ny >=M ) continue;
 					if(vis[nx][ny]==1 or board[nx][ny]!=1 ) continue;
 					
-					cout << "nx ny" << nx << " " << ny << '\n';
 					vis[nx][ny]=1; // 범위 맞고, 이전에 방문했던거 아니면서 방문가능지역이면 방문
 					Q.push({nx,ny}); //방문가능지역 push
 				}	
