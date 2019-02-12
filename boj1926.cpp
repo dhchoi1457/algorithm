@@ -44,7 +44,7 @@ int main()
 				auto cur = Q.front(); Q.pop();
 				for(int dir =0; dir<4; dir++)
 				{
-					int nx = (int) cur.X + dx[dir];
+					int nx = cur.X + dx[dir];
 					int ny = cur.Y + dy[dir];
 					if(nx<0 or nx>=N or ny<0 or ny >=M ) continue;
 					if(vis[nx][ny]==1 or board[nx][ny]!=1 ) continue;
