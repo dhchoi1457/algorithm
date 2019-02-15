@@ -23,27 +23,32 @@ int main()
 	Q.push(N);
 	dist[N]=0;
 	int n = 100;
+
 	while(n>0)
 	{
+		if(N>=K){
+			cout << N-K << '\n';
+			break;
+		}
 		int now = Q.front(); Q.pop();
 		if(now ==K)
 		{
-			cout << dist[now]<<'\n';
+			cout << dist[now] << "정답은!"<<'\n';
 			break;
 		}
+		cout << "now : "<< now << "now_dist:"<<dist[now]<<'\n';
 		for(int dir=0; dir<3; dir++)
 		{
 			int next = now + dx[dir];
 			if(dir==2) next = 2*now; 
 			if(next<0 or next >=100000) continue;
 			if(dist[next]>=0) continue; // 시작 조건에 따라.. ㅠㅜ 이거 조심  > or >=.. 일단 이거 고쳤는데 안되네 
-			cout << "now : "<< now << "now_dist:"<<dist[now]<<'\n';
 			Q.push(next);
 			dist[next] = dist[now]+1;
 			cout << "next : "<< next <<"next_dist:"<<dist[next]<<'\n'; 
 		}
 		n--;
 	}
-
 	return 0;
 }
+
