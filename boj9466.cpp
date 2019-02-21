@@ -3,13 +3,15 @@
 // cycle을 찾아내는 문제이므로 대부분 stack을 쓰는듯
 // 후.. 여기서 삽질을 많이했으므로, 일단 skip..ㅠㅜ
 // 추후에 다시풀기
+// https://barefoot-coder.tistory.com/71
+// fig 10에서 4 7 6이 사이클이 생기는데 왜 4 7 6이 다 사이클 구성원으로 인정받는지 몰랐는데,
+// 4 -> 7 > 6-> 4-> 7-> 6 한바퀴 더돌면서 check를 갱신함.
+
 
 #include <bits/stdc++.h>
 using namespace std;
 
 int board[100002];
-int visit[100002]; // 방문여부 
-int fin[100002]; // 사이클 체크용. 진짜 다시 방문할지 안할지?
 
 
 int main()
@@ -24,40 +26,39 @@ int main()
  	{
  		int N;
  		cin >> N;
+ 		int cnt=0;
+ 		int state[N];
+ 		fill(state,state+N,0); // 상태 체크 -1이면 팀소속, 0이면 아직 방문X, else 방문O,팀X
  		
- 		for(int n=1; n<=N; n++ )
+ 		for(int n=1; n<=N; n++) // 주어진 학생들의 순서
  			cin >> board[n];
 
- 		queue<int> Q;
+ 		for(int i=1; i<=N; i++){
+ 			if(state[i]!=0) continue;
+ 			int cur =i;
+ 			state[cur]=i;
+ 			
+ 			while(true){
+ 				cur = board[cur];
+ 				if(state[cur]==i){
+ 					state[cur]=-1; // 팀소속
+ 					cnt++;
+ 					int tmp = board[cur];
+ 					while(tmp!=cur){
+ 						state[tmp]=-1;
+ 						tmp=board[tmp];
+ 						cnt++;
+ 					}
+ 					break;
+ 				}
+ 				if(state[cur]==0){
+ 					state[cur]=i;
+ 					continue;
+ 				}else break;
+ 			}
 
- 		int cnt = 0;
- 		for(int i=1; i<=N; i++ )
- 		{
-			if(visit[i]==1) continue; // 이미 방문했던건 다시 안함. 이전에 사이클찾다가 확인했을 것.
-			Q.push(i);
-			visit[i]=1;
-			while(!Q.empty())
-			{
-				auto cur = Q.front(); Q.pop();
-				int nxt = board[cur];
-				if(visit[nxt]!=1) //기존에 방문했던적이 없다면
-				{
-					Q.push(nxt);
-					fin[cur]=1; // 이게 여기들어가는게 맞나
-					continue;
-				}
-
-				if(fin[nxt]!=1) // visit 1 이면서 fin 0 인경우. 사이클
-				{
-					for(int x = nxt; cur !=x; x=board[x]){cnt++;}
-					cnt++;
-
-				}
-				fin[cur]=1;
-			}
-
-			cout << N - cnt << "\n";
- 		} 		
+		}
+		cout << cnt << "\n"; 		
 	}
 
 	return 0;
