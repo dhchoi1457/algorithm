@@ -6,13 +6,12 @@
 // https://barefoot-coder.tistory.com/71
 // fig 10에서 4 7 6이 사이클이 생기는데 왜 4 7 6이 다 사이클 구성원으로 인정받는지 몰랐는데,
 // 4 -> 7 > 6-> 4-> 7-> 6 한바퀴 더돌면서 check를 갱신함.
-
+// https://blog.encrypted.gg/499 참고함
 
 #include <bits/stdc++.h>
 using namespace std;
 
-int board[100002];
-
+int board[100005];
 
 int main()
 {
@@ -26,10 +25,10 @@ int main()
  	{
  		int N;
  		cin >> N;
- 		int cnt=0;
+
  		int state[N];
  		fill(state,state+N,0); // 상태 체크 -1이면 팀소속, 0이면 아직 방문X, else 방문O,팀X
- 		
+ 		fill(board+1,board+N+1,0); // 상태 체크 -1이면 팀소속, 0이면 아직 방문X, else 방문O,팀X
  		for(int n=1; n<=N; n++) // 주어진 학생들의 순서
  			cin >> board[n];
 
@@ -42,12 +41,11 @@ int main()
  				cur = board[cur];
  				if(state[cur]==i){
  					state[cur]=-1; // 팀소속
- 					cnt++;
  					int tmp = board[cur];
  					while(tmp!=cur){
  						state[tmp]=-1;
  						tmp=board[tmp];
- 						cnt++;
+ 						//cnt++; // 이렇게 하면 돌다보니 중복 작업하는 부분이 생김, 그래서 마지막 -1 따로 체크 
  					}
  					break;
  				}
@@ -57,8 +55,16 @@ int main()
  				}else break;
  			}
 
+		}		
+		int cnt=N;
+		for(int n=1; n<=N; n++){
+			//cout << "n:state[n]" << n <<' ' << state[n] <<'\n';
+			if(state[n]==-1){
+				cnt--;
+			}
 		}
-		cout << cnt << "\n"; 		
+
+		cout << cnt << '\n';
 	}
 
 	return 0;
