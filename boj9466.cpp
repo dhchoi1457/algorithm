@@ -7,6 +7,8 @@
 // fig 10에서 4 7 6이 사이클이 생기는데 왜 4 7 6이 다 사이클 구성원으로 인정받는지 몰랐는데,
 // 4 -> 7 > 6-> 4-> 7-> 6 한바퀴 더돌면서 check를 갱신함.
 // https://blog.encrypted.gg/499 참고함
+// ㅠ 왜안되는걸까
+
 
 #include <bits/stdc++.h>
 using namespace std;
