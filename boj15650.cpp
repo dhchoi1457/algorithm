@@ -1,7 +1,6 @@
 // boj15650
 // N과M_2
 // 백트래킹
-// 아직 작업중
 
 #include <bits/stdc++.h>
 using namespace std;
