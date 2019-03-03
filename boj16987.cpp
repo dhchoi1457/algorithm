@@ -1,66 +1,62 @@
-// bkd 3/2 모의고사 A
+// boj 16987
 // 계란으로 계란치기 
+// 풀이는 갓킹독님 소스 참고 https://www.acmicpc.net/source/share/550e5f94d9504613971281134eebaeae
+
+// self 피드백
+// good : 거의 모든 로직이 풀이와 비슷.
+
+// 개선해야할 점 
+// 1. 함수에 대한 문제 정의가 애매함.
+// - 그냥 풀다보니 어느정도 가닥은 잡혔지만,
+//   이게 정확하게 어떠한 상황에서 어떻게 작용하는지가 부족함.
+//   내가 만든 함수의 인자가 정확하게 무얼 의미하는지를 알아야한다.
+// - 내구도와 무게가 계속 헷갈리는데, 이걸 다른 변수 배열로 각각 잡아버리면 덜헷갈린다.
+
+// 2. 불필요한 요소들이 존재 
+//  - 깨진 것을 체크하는 변수는 필요가 없다. 왜냐면 내구도가 0이하인지만 보면 되므로.
+// 3. 백트래킹이 제대로 안되었던 이유는 for문 안에 존재하지 않아야할 재귀가 있어서..
+// continue꺼 다음에 나오는 재귀가 제대로 백트래킹을 안먹음
+
+
 
 #include <bits/stdc++.h>
 using namespace std;
 
-#define X first
-#define Y second
 
-int N;
-int max_ans=-9999999;
+int n;
+int s[10];
+int w[10];
+int mx=0;
+int cnt=0;
 
-int egg[10][2];
-bool bk[10]; //부서졌는지 아닌지 체크
-int cnt;
-
-
-void upd(int i,int j){
-	//내구도 업데이트
-	egg[i][0] -= egg[j][1];
-	if(egg[i][0]<=0){bk[i]=false; cnt++;}
-	egg[j][0] -= egg[i][1];
-	if(egg[j][0]<=0){bk[j]=false; cnt++;}
-
-	cout << "update!" << '\n';
-	cout << "i:" <<egg[i][0]<<'\n';
-	cout << "j:" <<egg[j][0]<<'\n';
-	cout << "cnt :" << cnt << '\n';
-	cout << "\n";
-}
-
-void func(int now){
-	cout << "now: " << now <<'\n';
-	if(now == N){
-		max_ans = max(max_ans,cnt);
-		cout << "cnt : " << cnt << '\n';
-		cout << "-----" << '\n';
+void solve(int a){ // 현재 a번째 계란을 손에 쥐고 있다.
+	if(a == n){
+		mx = max(mx,cnt);
 		return;
 	}
 
-	if(!bk[now]){ //깨져있으면 다음으로 넘어감
-		cout <<"깨져있어서 pass " << now << '\n';  
-		func(now+1);
+	if(s[a]<=0 or cnt == n-1){ //현재 손에 있는 계란이 꺠져있거나, 나머지 계란이 전부 꺠져있는 경우 다음으로 넘어간다.
+		solve(a+1);
+		return;
 	}
 
-	for(int k=0; k<N; k++){
-		cout << "k search" <<'\n';
-		cout << "now / k / bk[k] :" <<now << " / "<< k <<" / "<< bk[k] << "\n";
-		if( k==N-1 and (now==k or bk[k]==false)) func(now+1);
-		if(now==k) continue; //나랑 같은건 스킵
-		if(bk[k]==false) continue; //깨져있는것도 스킵
-		int before_now = egg[now][0];
-		int before_k = egg[k][0];
-		int before_cnt = cnt;
-		cout << "before cnt : " << before_cnt << '\n';
-		upd(now,k);
-		func(now+1);
-		cout <<"다음 k" <<'\n';
+	for(int t=0; t<n; t++){
+		if(t==a or s[t]<=0) continue; //나랑 같은거 or 깨져있는거 스킵
+		
+		s[a] -= w[t];
+		s[t] -= w[a];
+		if(s[a] <= 0){cnt++;}
+		if(s[t] <= 0){cnt++;}
+		
+		solve(a+1);
+		
 		//백트래킹 
-		egg[now][0] = before_now;
-		egg[k][0] = before_k;
-		cnt = before_cnt;
-		cout << "백트래킹 cnt : " << cnt << '\n';
+		// 백트래킹시에 다른 변수를 써서 백트래킹해주면
+		// 그 변수가 계속 다른 값으로 선언되어서 꼬이는듯
+		if(s[a]<=0){cnt--;}
+		if(s[t]<=0){cnt--;}
+		s[a] += w[t];
+		s[t] += w[a];		
 	}
 }
 
@@ -69,19 +65,17 @@ int main()
 {
 	ios::sync_with_stdio(0);
 	cin.tie(0);
-	cin >> N;
+	cin >> n;
 
-	for(int i=0; i<N; i++){
-		cin >> egg[i][0] >> egg[i][1];
-		bk[i]= true;
+	for(int i=0; i<n; i++){
+		cin >> s[i] >> w[i];
 	}
 
 	//제일 왼쪽에 있는거부터 돌아가면서 들고 계란깨기를 시도한다.
 	//이미 깨져있는건 넘긴다.
 
-	cnt = 0; //처음엔 깨진거 없다
-	func(0);
-
-	cout << max_ans <<'\n';
+	//0번쨰 계란부터 손에 쥐고 계란치기를 시도
+	solve(0);
+	cout << mx;
 	return 0;
 }
