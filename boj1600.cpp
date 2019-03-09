@@ -12,6 +12,11 @@
 // 그 지점에서의 거리가 갱신되는게 좀 불안? 이게 최저값이 맞나 그런 생각이 들었는데
 // BFS의 특징을 생각해보면 최단거리임.
 
+//왜틀린지 모르겠당.. 
+//해당지점의 거리에서 다른 지점으로 가는 방식이
+//2가지가있을텐데(말처럼 가거나, 그냥 가거나)
+//그래서 3차원으로 업글했는데도 그럼.. 음.. 왜그러지
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -27,7 +32,7 @@ typedef struct{
 }Monkey; 
 
 int board[222][222];
-int dist[222][222];
+int dist[222][222][32];
 int visit[222][222][32]; // 마지막 차원에는 나이트로 k번 이동 가능함을 표시 
 
 //3-dim movement
@@ -56,7 +61,7 @@ int main()
 	queue<Monkey> Q;
 	Monkey start = {0,0,K};
 	Q.push(start); // start point
-	dist[0][0]=0;
+	dist[0][0][K]=0;
 	visit[0][0][K]=1;
 
 	while(!Q.empty()){
@@ -67,9 +72,9 @@ int main()
 		int ck = cur.knight;
 
 		//cout << "cur:" << cr << ' ' << cc <<' '<< ck <<'\n'; 
-		//cout << "dist: "<< dist[cr][cc] <<'\n';
+		//cout << "dist: "<< dist[cr][cc][ck] <<'\n';
 		if(cr == tr and cc== tc){
-			cout << dist[cr][cc] << '\n';
+			cout << dist[cr][cc][ck] << '\n';
 			return 0;
 		}
 
@@ -83,7 +88,7 @@ int main()
 			if(visit[nr][nc][ck]==1 or board[nr][nc]==1) continue;
 			Q.push({nr,nc,ck});
 			visit[nr][nc][ck]=1;
-			dist[nr][nc] = dist[cr][cc]+1;		
+			dist[nr][nc][ck] = dist[cr][cc][ck]+1;		
 		}
 
 		if(ck>0){ // 말처럼 움직일수 있으면 이런 경우도 가능
@@ -94,9 +99,9 @@ int main()
 
 				if(nr < 0 or nr >= W or nc < 0 or nc >=H) continue;
 				if(visit[nr][nc][ck-1]==1 or board[nr][nc]==1) continue;
-				Q.push({nr,nc,ck-1});
+				Q.push({nr,nc,ck-1}); 
 				visit[nr][nc][ck-1]=1;
-				dist[nr][nc] = dist[cr][cc]+1;		
+				dist[nr][nc][ck-1] = dist[cr][cc][ck]+1;		
 			}
 		}
 
