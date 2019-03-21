@@ -13,16 +13,16 @@ class coor{
 public:
 	int x, y, z;
 	coor(int _x, int _y, int _z):x(_x),y(_y),z(_z){};
-}
+};
 
 
 
-board[4][5][5][5]; // 회전방향 / 층 / x / y
+int board[4][5][5][5]; // 회전방향 / 층 / x / y
 
 int maze[5][5][5]; // 완성된 미로 
 int dist[5][5][5]; // 거리탐색
 
-int dx[6]={1,0,0,-1,0,0,0};
+int dx[6]={1,0,0,-1,0,0};
 int dy[6]={0,1,0,0,-1,0};
 int dz[6]={0,0,1,0,0,-1};
 
@@ -38,9 +38,9 @@ int solve(){
 
 	queue<coor> q;
 	q.push(coor(0,0,0));
-	while(!q.empty()){
-		auto cur = q.front(); q.pop();
 
+	while(!q.empty()){
+		coor cur = q.front(); q.pop();
 		if(int dir=0; dir <6; dir++){
 			int nx = cur.x + dx[dir];
 			int ny = cur.y + dy[dir];
@@ -65,26 +65,26 @@ int main(){
 		//기본 입력 
 		for(int j=0; j<5; j++){
 			for(int k=0; k<5; k++){
-				cin >> board[0][i][j][k]
+				cin >> board[0][i][j][k];
 
 		//회전 입력1 
 		for(int j=0; j<5; j++){
 			for(int k=0; k<5; k++){
-				board[1][i][4-k][j] = borad[0][i][j][k];
+				board[1][i][4-k][j] = board[0][i][j][k];
 
 		//회전 입력2
 		for(int j=0; j<5; j++){
 			for(int k=0; k<5; k++){
-				board[2][i][4-k][j] = borad[1][i][j][k];
+				board[2][i][4-k][j] = board[1][i][j][k];
 
 		//회전 입력3
 		for(int j=0; j<5; j++){
 			for(int k=0; k<5; k++){
-				board[3][i][4-k][j] = borad[2][i][j][k];
+				board[3][i][4-k][j] = board[2][i][j][k];
 
 	}
 
-	int order = {0,1,2,3,4} //판 쌓는 순서
+	int order[5] = {0,1,2,3,4}; //판 쌓는 순서
 
 	int ans = 999;
 
