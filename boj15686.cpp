@@ -3,7 +3,9 @@
 // 삼성전자 ds SW역량기출
 // next_permutation 조합 이용해서 풀기
 // 인덱스 주의(갯수 조심)
- 
+
+// dfs로 푸는게 보통방법인듯 - na982
+
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -28,13 +30,19 @@ ck_house ckh[15];
 int ck_index=0;
 
 void ck_update(ck_house ck){
+
+	//치킨 거리 업데이트. 
+	//해당 치킨집으로 계산했을떄가 더 가까우면 갱신 
 	for(int i=0; i<N; i++){
 		for(int j=0; j<N; j++){
 			if(board[i][j]==1){
+
 				int now_dist = abs(ck.y - i)+abs(ck.x-j);
 
+				//처음엔 걍 계산한거 집어넣고
 				if(dist_map[i][j]==0){dist_map[i][j]=now_dist;}
 
+				//이미 계산된게 있으면 비교하고 갱신
 				if(dist_map[i][j]!=0 and now_dist < dist_map[i][j] ){
 					dist_map[i][j]=now_dist;
 				}
@@ -54,6 +62,8 @@ int main(){
 		for(int j=0; j<N; j++){
 			cin >> board[i][j];
 			dist_map[i][j]=0;
+
+			//치킨집 입력받아놓기
 			if(board[i][j]==2){
 				ckh[ck_index].y = i;
 				ckh[ck_index].x = j;
@@ -119,7 +129,7 @@ int main(){
 		}
 
 	}while(next_permutation(ind.begin(),ind.end()));
-
+	//조합으로 할떈 ind 퍼뮤테이션
 
 
 	cout << min_output << '\n';
