@@ -2,7 +2,6 @@
 // 뱀
 
 // 삼성 기출
-// bfs
 
 #include <bits/stdc++.h>
 using namespace std;

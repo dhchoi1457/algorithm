@@ -28,6 +28,37 @@ const int dx[4]={0,1,0,-1};
 
 int board[22][22];
 
+int col_check[22]={0,};
+
+int pass[22]={};
+
+void solve(){
+
+	//탐색해서 연달아서 맞는 조건인지 확인
+	for(int x=0; x<W; x++){
+		int check=0;
+		int tmp=board[0][x];
+		pass[x]=0;
+
+		for(int y=1; y<D; y++){
+			if(board[y][x]==tmp){
+				check++;
+				if(check==K){
+					pass[x]=1;
+					break;
+				}
+			}
+			else{
+				tmp = board[y][x];
+				check=0;
+			}
+		}
+		if(pass[x]==1){break;}
+	}
+
+	
+}
+
 int D,W,K;
 int main()
 {
@@ -41,9 +72,7 @@ int main()
 		for(int y=0; y<D; y++){
 			for(int x=0; x<W; x++){
 				cin >> board[y][x];
-				cout << board[y][x] << ' ';
 			}
-			cout <<'\n';
 		}
 
 
